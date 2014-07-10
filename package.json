@@ -18,5 +18,13 @@
   "bugs": {
     "url": "https://github.com/tjwebb/nex-repository/issues"
   },
-  "homepage": "https://github.com/tjwebb/nex-repository"
+  "homepage": "https://github.com/tjwebb/nex-repository",
+  "dependencies": {
+    "lodash": "^2.4.1",
+    "nex": "^1.2.47",
+    "nex-api": "^2.0.1",
+    "nex-github": "^0.5.5",
+    "rimraf": "^2.2.8",
+    "tar.gz": "^0.1.1"
+  }
 }

@@ -45,4 +45,3 @@ handler.do = function (pkg) {
 handler.undo = function (pkg) {
   rimraf.sync('node_modules');
 };
-
