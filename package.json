@@ -20,11 +20,19 @@
   },
   "homepage": "https://github.com/tjwebb/nex-repository",
   "dependencies": {
+    "colors": "^0.6.2",
     "lodash": "^2.4.1",
-    "nex": "^1.2.47",
     "nex-api": "^2.0.1",
     "nex-github": "^0.5.5",
+    "npmlog": "^0.1.1",
     "rimraf": "^2.2.8",
     "tar.gz": "^0.1.1"
-  }
+  },
+  "bundledDependencies": [
+    "colors",
+    "lodash",
+    "npmlog",
+    "rimraf",
+    "tar.gz"
+  ]
 }

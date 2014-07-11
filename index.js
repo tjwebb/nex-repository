@@ -1,12 +1,12 @@
 'use strict';
 
-var _ = require('lodash');
-var nex = require('nex-api');
-var targz = require('tar.gz');
-var rimraf = require('rimraf');
-var github = require('nex-github');
 var path = require('path');
 var proc = require('child_process');
+var nex = require('nex-api');
+var github = require('nex-github');
+var _ = require('lodash');
+var targz = require('tar.gz');
+var rimraf = require('rimraf');
 
 var handler = module.exports = new nex.Handler('repository');
 
@@ -36,7 +36,6 @@ handler.do = function (pkg) {
     self.log.error('install', 'Failed to download', pkg.name, 'Please try again');
     process.exit(1);
   }); 
-
 };
 
 /**
