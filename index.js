@@ -1,6 +1,7 @@
 'use strict';
 
 var path = require('path');
+var fs = require('fs');
 var proc = require('child_process');
 var nex = require('nex-api');
 var github = require('nex-github');
@@ -17,6 +18,12 @@ var handler = module.exports = new nex.Handler('repository');
 handler.do = function (pkg) {
   let packageName = pkg.name + '-' + pkg.version;
   let repository = pkg[this.field];
+
+  // skip, if already cloned
+  if (fs.existsSync(path.resolve(process.cwd(), '.git'))) {
+    log.info(packageName, 'found existing .git directory. skipping');
+    return;
+  }
 
   github.getRelease(repository)
   .then(function (tarball) {
