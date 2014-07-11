@@ -1,6 +1,6 @@
 {
   "name": "nex-repository",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "nex-repository ==============",
   "main": "index.js",
   "scripts": {
