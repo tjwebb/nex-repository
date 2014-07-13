@@ -30,7 +30,10 @@ handler.do = function (pkg) {
       log.info('tarball', 'extracting', tarball);
 
       new targz().extract(tarball, path.resolve(process.cwd(), 'extract'), function (err) {
-        if (err) return log.error('extract', err);
+        if (err) {
+          log.error('extract', err);
+          throw err;
+        }
 
         log.info('tarball', 'extracted');
 
