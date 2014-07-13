@@ -17,7 +17,7 @@ var handler = module.exports = new nex.Handler('repository');
  */
 handler.do = function (pkg) {
   let packageName = pkg.name + '-' + pkg.version;
-  let repository = pkg[this.field];
+  let repository = _.extend({ version: pkg.version }, pkg[this.field]);
 
   // skip, if already cloned
   if (fs.existsSync(path.resolve(process.cwd(), '.git'))) {
@@ -26,23 +26,23 @@ handler.do = function (pkg) {
   }
 
   github.getRelease(repository)
-  .then(function (tarball) {
-    log.info('tarball', 'extracting', tarball);
+    .then(function (tarball) {
+      log.info('tarball', 'extracting', tarball);
 
-    new targz().extract(tarball, path.resolve(process.cwd(), 'extract'), function (err) {
-      if (err) return log.error('extract', err);
+      new targz().extract(tarball, path.resolve(process.cwd(), 'extract'), function (err) {
+        if (err) return log.error('extract', err);
 
-      log.info('tarball', 'extracted');
+        log.info('tarball', 'extracted');
 
-      proc.execSync([ 'cp -r', path.resolve('extract', packageName, '*'), process.cwd() ].join(' '));
-      rimraf.sync(path.resolve(process.cwd(), 'extract'));
-      rimraf.sync(path.resolve(process.cwd(), packageName + '.tar.gz'));
+        proc.execSync([ 'cp -r', path.resolve('extract', packageName, '*'), process.cwd() ].join(' '));
+        rimraf.sync(path.resolve(process.cwd(), 'extract'));
+        rimraf.sync(path.resolve(process.cwd(), packageName + '.tar.gz'));
+      }); 
+    },  
+    function () {
+      log.error('install', 'Failed to download', pkg.name, 'Please try again');
+      process.exit(1);
     }); 
-  },  
-  function () {
-    log.error('install', 'Failed to download', pkg.name, 'Please try again');
-    process.exit(1);
-  }); 
 };
 
 /**
