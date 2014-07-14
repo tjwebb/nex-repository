@@ -19,9 +19,9 @@ handler.do = function (pkg) {
   let packageName = pkg.name + '-' + pkg.version;
   let repository = _.extend({ version: pkg.version }, pkg[this.field]);
 
-  // skip, if already cloned
-  if (fs.existsSync(path.resolve(process.cwd(), '.git'))) {
-    log.info(packageName, 'found existing .git directory. skipping');
+  // skip, if already installed from git
+  if (fs.existsSync(path.resolve(process.cwd(), '.npmignore'))) {
+    log.info(packageName, 'found existing github release install. skipping...');
     return;
   }
 
@@ -52,5 +52,5 @@ handler.do = function (pkg) {
  * @override
  */
 handler.undo = function (pkg) {
-  rimraf.sync('node_modules');
+  rimraf.sync('.npmignore');
 };
