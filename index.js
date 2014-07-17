@@ -22,8 +22,9 @@ handler.do = function (pkg) {
     return;
   }
 
-  github.getRelease.sync(repository);
-  github.extractRelease.sync(repository);
+  github.getRelease(repository).then(function () {
+    github.extractRelease.sync(repository);
+  });
 };
 
 /**
