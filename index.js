@@ -2,12 +2,9 @@
 
 var path = require('path');
 var fs = require('fs');
-var proc = require('child_process');
 var nex = require('nex-api');
 var github = require('nex-github');
 var _ = require('lodash');
-var targz = require('tar.gz');
-var rimraf = require('rimraf');
 var log = require('npmlog');
 
 var handler = module.exports = new nex.Handler('repository');
@@ -17,40 +14,21 @@ var handler = module.exports = new nex.Handler('repository');
  */
 handler.do = function (pkg) {
   let packageName = pkg.name + '-' + pkg.version;
-  let repository = _.extend({ version: pkg.version }, pkg[this.field]);
+  let repository = _.defaults({ version: pkg.version }, pkg[this.field]);
 
   // skip, if already installed from git
   if (fs.existsSync(path.resolve(process.cwd(), '.npmignore'))) {
-    log.info(packageName, 'found existing github release install. skipping...');
+    log.info(packageName, 'found existing github release. skipping github download');
     return;
   }
 
-  github.getRelease(repository)
-    .then(function (tarball) {
-      log.info('tarball', 'extracting', tarball);
-
-      new targz().extract(tarball, path.resolve(process.cwd(), 'extract'), function (err) {
-        if (err) {
-          log.error('extract', err);
-          throw err;
-        }
-
-        log.info('tarball', 'extracted');
-
-        proc.execSync([ 'cp -r', path.resolve('extract', packageName, '*'), process.cwd() ].join(' '));
-        rimraf.sync(path.resolve(process.cwd(), 'extract'));
-        rimraf.sync(path.resolve(process.cwd(), packageName + '.tar.gz'));
-      }); 
-    },  
-    function () {
-      log.error('install', 'Failed to download', pkg.name, 'Please try again');
-      process.exit(1);
-    }); 
+  github.getRelease.sync(repository);
+  github.extractRelease.sync(repository);
 };
 
 /**
  * @override
  */
 handler.undo = function (pkg) {
-  rimraf.sync('.npmignore');
+
 };
