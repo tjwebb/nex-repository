@@ -14,7 +14,7 @@ var handler = module.exports = new nex.Handler('repository');
  */
 handler.do = function (pkg) {
   let packageName = pkg.name + '-' + pkg.version;
-  let repository = _.defaults({ version: pkg.version }, pkg[this.field]);
+  let repository = _.defaults({ version: pkg.version, target: process.cwd() }, pkg[this.field]);
 
   // skip, if already installed from git
   if (fs.existsSync(path.resolve(process.cwd(), '.npmignore'))) {
